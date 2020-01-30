@@ -1,32 +1,10 @@
 'use strict';
 
-{
-    "author": {
-        "avatar": строка, адрес изображения вида img/avatars/user{{xx}}.png, где {{xx}} это число от 1 до 8 с ведущим нулём. Например, 01, 02 и т. д. Адреса изображений не повторяются
-        },
-    "offer": {
-      "title": строка, заголовок предложения
-      "address": строка, адрес предложения. Для простоты пусть пока представляет собой запись вида "{{location.x}}, {{location.y}}", например, "600, 350"
-      "price": число, стоимость
-      "type": строка с одним из четырёх фиксированных значений: palace, flat, house или bungalo
-      "rooms": число, количество комнат
-      "guests": число, количество гостей, которое можно разместить
-      "checkin": строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00,
-      "checkout": строка с одним из трёх фиксированных значений: 12:00, 13:00 или 14:00
-      "features": массив строк случайной длины из ниже предложенных: "wifi", "dishwasher", "parking", "washer", "elevator", "conditioner",
-      "description": строка с описанием,
-      "photos": массив строк случайной длины, содержащий адреса фотографий "http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"
-    },
-
-    "location": {
-      "x": случайное число, координата x метки на карте. Значение ограничено размерами блока, в котором перетаскивается метка.
-      "y": случайное число, координата y метки на карте от 130 до 630.
-    }
-}
-
-var ADRESS_URL_FIRST_PART = 'img/avatars/user';
+var ADRESS_URL_FIRST_PART = 'img/avatars/user0';
 var ADRESS_URL_SECOND_PART = '.png';
 var OFFERS_QUANTITY = 8;
+var PIN_WIDTH = 50;
+var PIN_HIGHT = 70;
 var TITLES = [
   'Уютное гнездышко для молодоженов',
   'Старая хибара',
@@ -56,27 +34,98 @@ var FEATURES = [
   'elevator',
   'conditioner',
 ];
+var DESCRIPTIONS = [
+  'Великолепная квартира-студия в центре Токио.',
+  'Подходит как туристам, так и бизнесменам.',
+  'Квартира полностью укомплектована и недавно отремонтирована.',
+  'Можно заехать с домашними питомцами.',
+  'Мы не против, если вы замутите у нас вечеринку.',
+  'Только для славян.',
+  'Оплату натурой не предлагать.',
+  'Сказочным в заселении отказываем.',
+];
+var PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+];
+
+var mapElement = document.querySelector('.map');
+var mapPinsElement = mapElement.querySelector('.map__pins');
+var pinElement = document.querySelector('#pin')
+    .content
+    .querySelector('.map__pin');
 
 var getRandomInteger = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
 };
 
-var createAvatarUrls = function (quantity, firstString, secondString) {
-  var newUrls = new Array(quantity);
-  for (var i = 0; i < quantity; i++) {
-    newUrls[i] = {
-      firstString + i + secondString,
-    };
-  }
-  return newUrls;
-}
-
-createAvatarUrls(OFFERS_QUANTITY, ADRESS_URL_FIRST_PART, ADRESS_URL_SECOND_PART);
-
-var createAddress = function () {
-  return getRandomInteger(0, 1000) + ', ' + getRandomInteger(0, 1000);
+var getRandomItem = function (array) {
+  return array[getRandomInteger(0, array.length - 1)];
 };
 
-price: getRandomInteger(1000, 10000);
-rooms: getRandomInteger(1, 5);
-guests: getRandomInteger(1, 10);
+var getRandomArray = function (array) {
+  var newArray = new Array(getRandomInteger(0, array.length));
+  for (var i = 0; i < newArray.length; i++) {
+    newArray[i] = array[i];
+  }
+  return newArray;
+};
+
+var createAvatarUrls = function (quantity) {
+  var newUrls = new Array(quantity);
+  for (var i = 0; i < quantity; i++) {
+    newUrls[i] = ADRESS_URL_FIRST_PART + (i + 1) + ADRESS_URL_SECOND_PART;
+  }
+  return newUrls;
+};
+
+var createOffersArray = function (quantity) {
+  var newArray = new Array(quantity);
+  for (var i = 0; i < quantity; i++) {
+    newArray[i] = {
+      author: {
+        avatar: createAvatarUrls(OFFERS_QUANTITY)[i],
+      },
+      offer: {
+        title: getRandomItem(TITLES),
+        address: getRandomInteger(0, 1000) + ', ' + getRandomInteger(0, 1000),
+        price: getRandomInteger(1000, 10000),
+        type: getRandomItem(TYPES),
+        rooms: getRandomInteger(1, 5),
+        guests: getRandomInteger(1, 10),
+        checkin: getRandomItem(CHECK_TIMES),
+        checkout: getRandomItem(CHECK_TIMES),
+        features: getRandomArray(FEATURES),
+        description: getRandomItem(DESCRIPTIONS),
+        photos: getRandomArray(PHOTOS),
+      },
+      location: {
+        x: getRandomInteger(0, mapPinsElement.clientWidth),
+        y: getRandomInteger(130, 630),
+      },
+    };
+  }
+  return newArray;
+};
+
+var renderOffers = function (proffer) {
+  var offersElement = pinElement.cloneNode(true);
+  offersElement.style = 'left:' + (proffer.location.x + (PIN_WIDTH / 2)) + 'px; top:'
+  + (proffer.location.y + PIN_HIGHT) + 'px';
+  offersElement.querySelector('img').src = proffer.author.avatar;
+  offersElement.querySelector('img').alt = proffer.offer.title;
+  return offersElement;
+};
+
+var addOffers = function (array, placement) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < array.length; i++) {
+    fragment.appendChild(renderOffers(array[i]));
+  }
+  placement.appendChild(fragment);
+};
+
+addOffers(createOffersArray(OFFERS_QUANTITY), mapPinsElement);
+
+mapElement.classList.remove('map--faded');
