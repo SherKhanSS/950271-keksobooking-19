@@ -142,16 +142,6 @@ mapElement.classList.remove('map--faded');
 // var popupPhotosElement = pinCardElement.querySelector('.popup__photos');
 // var popupPhotoElement = pinCardElement.querySelector('.popup__photo');
 //
-// var renderPhoto = function (array) {
-//   var newPhotoElement = popupPhotoElement.cloneNode(true);
-//   for (var i = 0; i < array.length; i++) {
-//     newPhotoElement.src = array[i];
-//   }
-//   return newPhotoElement;
-// };
-//
-// console.log(createElement(PHOTOS, renderPhoto()))
-//
 // var getRusType = function (type) {
 //   if (type === 'flat') {
 //     return 'Квартира';
@@ -178,10 +168,8 @@ mapElement.classList.remove('map--faded');
 //   cardElement.querySelector('.popup__text--time').textContent
 //   = 'Заезд после ' + proffer.offer.checkin + ', выезд до ' + proffer.offer.checkout;
 //   cardElement.querySelector('.popup__features').textContent = proffer.offer.features.join(', ');
+//   // со списком такая же фигня
 //   cardElement.querySelector('.popup__description').textContent = proffer.offer.description;
-//   cardElement.querySelector('.popup__photos').appendChild
-//       .createElement(proffer.offer.photos, renderPhoto(proffer));
+//   // пока у меня нет идей, как отрисовать массив тегов img с адресами правильно
 //   return cardElement;
 // };
-//
-// console.log(renderCards(createOffersArray(1)[0]));
