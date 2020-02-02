@@ -156,6 +156,18 @@ mapElement.classList.remove('map--faded');
 //   }
 // };
 //
+// var getImgElements = function (array) {
+//   var fragment = document.createDocumentFragment();
+//   for (var i = 0; i < array.length; i++) {
+//     var photoElement = popupPhotoElement.cloneNode(true);
+//     photoElement.src = array[i];
+//     fragment.appendChild(photoElement);
+//   }
+//   return fragment;
+// };
+//
+// console.log(getImgElements(PHOTOS));
+//
 // var renderCards = function (proffer) {
 //   var cardElement = pinCardElement.cloneNode(true);
 //   cardElement.querySelector('.popup__avatar').src = proffer.author.avatar;
@@ -168,8 +180,11 @@ mapElement.classList.remove('map--faded');
 //   cardElement.querySelector('.popup__text--time').textContent
 //   = 'Заезд после ' + proffer.offer.checkin + ', выезд до ' + proffer.offer.checkout;
 //   cardElement.querySelector('.popup__features').textContent = proffer.offer.features.join(', ');
-//   // со списком такая же фигня
+//   // не реализовано добавление
 //   cardElement.querySelector('.popup__description').textContent = proffer.offer.description;
-//   // пока у меня нет идей, как отрисовать массив тегов img с адресами правильно
+//   // не решена проблема с 1-й пустой фоткой
+//   cardElement.querySelector('.popup__photos').appendChild(getImgElements(proffer.offer.photos));
 //   return cardElement;
 // };
+//
+// console.log(renderCards(createOffersArray(1)[0]));
