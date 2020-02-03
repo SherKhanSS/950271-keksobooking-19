@@ -133,7 +133,7 @@ var addElementInDom = function (element, parent) {
 
 addElementInDom(createElement(createOffersArray(OFFERS_QUANTITY), renderOffers), mapPinsElement);
 
-// mapElement.classList.remove('map--faded');
+mapElement.classList.remove('map--faded');
 
 // 3-я лекция 2-е задание наброски
 
