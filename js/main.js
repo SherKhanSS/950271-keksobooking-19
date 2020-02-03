@@ -55,6 +55,7 @@ var mapPinsElement = mapElement.querySelector('.map__pins');
 var pinElement = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
+// var mapPinElement = mapPinsElement.querySelector('.map__pin--main');
 
 var getRandomInteger = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
@@ -132,9 +133,9 @@ var addElementInDom = function (element, parent) {
 
 addElementInDom(createElement(createOffersArray(OFFERS_QUANTITY), renderOffers), mapPinsElement);
 
-mapElement.classList.remove('map--faded');
+// mapElement.classList.remove('map--faded');
 
-// второе задание наброски
+// 3-я лекция 2-е задание наброски
 
 // var pinCardElement = document.querySelector('#card')
 //     .content
@@ -188,3 +189,27 @@ mapElement.classList.remove('map--faded');
 // };
 //
 // console.log(renderCards(createOffersArray(1)[0]));
+
+// 4-я лекция 1-е задание наброски
+
+// var formElement = document.querySelector('.ad-form');
+// var formFieldsetElements = formElement.querySelectorAll('fieldset');
+//
+// var changesDisabled = function (array) {
+//   for (var i = 0; i < array.length; i++) {
+//     array[i].setAttribute('disabled', 'disabled');
+//   }
+// };
+//
+// var changesAtiv = function (evt) {
+//   if (evt.which === 1) {
+//     for (var i = 0; i < formFieldsetElements.length; i++) {
+//       formFieldsetElements[i].removeAttribute('disabled');
+//     }
+//     mapPinElement.removeEventListener('mousedown', changesAtiv);
+//   }
+// };
+//
+// changesDisabled(formFieldsetElements);
+//
+// mapPinElement.addEventListener('mousedown', changesAtiv);
