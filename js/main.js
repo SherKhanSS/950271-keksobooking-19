@@ -66,31 +66,42 @@ var getRandomItem = function (array) {
 };
 
 var getRandomArray = function (array) {
-  var newArray = new Array(getRandomInteger(0, array.length));
-  for (var i = 0; i < newArray.length; i++) {
-    newArray[i] = array[i];
-  }
-  return newArray;
+  var newArrays = array.slice(getRandomInteger(0, (array.length - 1), getRandomInteger(0, (array.length - 1))));
+  return newArrays;
 };
 
 var createAvatarUrls = function (quantity) {
   var newUrls = new Array(quantity);
-  for (var i = 0; i < quantity; i++) {
-    newUrls[i] = ADRESS_URL_FIRST_PART + (i + 1) + ADRESS_URL_SECOND_PART;
+  for (var i = 1; i <= quantity; i++) {
+    newUrls[i - 1] = ADRESS_URL_FIRST_PART + i + ADRESS_URL_SECOND_PART;
   }
   return newUrls;
 };
+
+var createLocations = function (quantity) {
+  var locations = new Array(quantity);
+  for (var i = 0; i < quantity; i++) {
+    locations[i] = {
+      x: getRandomInteger(0, 1200),
+      y: getRandomInteger(130, 630),
+    };
+  }
+  return locations;
+};
+
+var avatarUrls = createAvatarUrls(OFFERS_QUANTITY);
+var locations = createLocations(OFFERS_QUANTITY);
 
 var createOffersArray = function (quantity) {
   var newArray = new Array(quantity);
   for (var i = 0; i < quantity; i++) {
     newArray[i] = {
       author: {
-        avatar: createAvatarUrls(OFFERS_QUANTITY)[i],
+        avatar: avatarUrls[i],
       },
       offer: {
         title: getRandomItem(TITLES),
-        address: getRandomInteger(0, 1000) + ', ' + getRandomInteger(0, 1000),
+        address: locations[i].x + ', ' + locations[i].y,
         price: getRandomInteger(1000, 10000),
         type: getRandomItem(TYPES),
         rooms: getRandomInteger(1, 5),
@@ -102,8 +113,8 @@ var createOffersArray = function (quantity) {
         photos: getRandomArray(PHOTOS),
       },
       location: {
-        x: getRandomInteger(0, mapPinsElement.clientWidth),
-        y: getRandomInteger(130, 630),
+        x: locations[i].x,
+        y: locations[i].y,
       },
     };
   }
@@ -112,26 +123,23 @@ var createOffersArray = function (quantity) {
 
 var renderOffers = function (proffer) {
   var offersElement = pinElement.cloneNode(true);
-  offersElement.style = 'left:' + (proffer.location.x + (PIN_WIDTH / 2)) + 'px; top:'
-  + (proffer.location.y + PIN_HIGHT) + 'px';
-  offersElement.querySelector('img').src = proffer.author.avatar;
-  offersElement.querySelector('img').alt = proffer.offer.title;
+  var offersImgElement = offersElement.querySelector('img');
+  offersElement.style.left = (proffer.location.x + (PIN_WIDTH / 2)) + 'px';
+  offersElement.style.top = (proffer.location.y + PIN_HIGHT) + 'px';
+  offersImgElement.src = proffer.author.avatar;
+  offersImgElement.alt = proffer.offer.title;
   return offersElement;
 };
 
-var createElement = function (array, render) {
+var createFragment = function (array, render) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < array.length; i++) {
     fragment.appendChild(render(array[i]));
   }
-  return fragment;
+  mapPinsElement.appendChild(fragment);
 };
 
-var addElementInDom = function (element, parent) {
-  parent.appendChild(element);
-};
-
-addElementInDom(createElement(createOffersArray(OFFERS_QUANTITY), renderOffers), mapPinsElement);
+createFragment(createOffersArray(OFFERS_QUANTITY), renderOffers);
 
 mapElement.classList.remove('map--faded');
 
