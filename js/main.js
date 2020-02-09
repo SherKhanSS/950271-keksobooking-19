@@ -5,6 +5,10 @@ var ADRESS_URL_SECOND_PART = '.png';
 var OFFERS_QUANTITY = 8;
 var PIN_WIDTH = 50;
 var PIN_HIGHT = 70;
+var MAP_WIDTH = 1200;
+var MAX_COORDINATES = 630;
+var MIN_COORDINATES = 130;
+var COST_RATIO = 1000;
 var TITLES = [
   'Уютное гнездышко для молодоженов',
   'Старая хибара',
@@ -58,66 +62,52 @@ var pinTemplateElement = document.querySelector('#pin')
 // var mapPinElement = mapPinsElement.querySelector('.map__pin--main');
 
 var getRandomInteger = function (min, max) {
-  return Math.round(Math.random() * (max - min) + min);
+  var rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
 };
 
 var getRandomItem = function (array) {
   return array[getRandomInteger(0, array.length - 1)];
 };
 
-var getRandomArray = function (array) {
-
-  var newArrays = array.slice(getRandomInteger(0, (array.length - 1), getRandomInteger(0, (array.length - 1))));
-
-  return newArrays;
+var getRandomElements = function (array) {
+  return array.slice(getRandomInteger(0, (array.length - 1), getRandomInteger(0, (array.length - 1))));
 };
 
-var createAvatarUrls = function (quantity) {
-  var newUrls = new Array(quantity);
-
-  for (var i = 1; i <= quantity; i++) {
-    newUrls[i - 1] = ADRESS_URL_FIRST_PART + i + ADRESS_URL_SECOND_PART;
-  }
-
-  return newUrls;
-};
 
 var createLocations = function (quantity) {
   var locations = new Array(quantity);
-
   for (var i = 0; i < quantity; i++) {
     locations[i] = {
-      x: getRandomInteger(0, 1200),
-      y: getRandomInteger(130, 630),
+      x: getRandomInteger(0, MAP_WIDTH),
+      y: getRandomInteger(MIN_COORDINATES, MAX_COORDINATES),
     };
   }
-
   return locations;
 };
 
-var avatarUrls = createAvatarUrls(OFFERS_QUANTITY);
+
 var locations = createLocations(OFFERS_QUANTITY);
 
 var createOffersArray = function (quantity) {
   var newArray = new Array(quantity);
-
   for (var i = 0; i < quantity; i++) {
     newArray[i] = {
       author: {
-        avatar: avatarUrls[i],
+        avatar: ADRESS_URL_FIRST_PART + (i + 1) + ADRESS_URL_SECOND_PART,
       },
       offer: {
         title: getRandomItem(TITLES),
         address: locations[i].x + ', ' + locations[i].y,
-        price: getRandomInteger(1000, 10000),
+        price: getRandomInteger(1, 10) * COST_RATIO,
         type: getRandomItem(TYPES),
         rooms: getRandomInteger(1, 5),
         guests: getRandomInteger(1, 10),
         checkin: getRandomItem(CHECK_TIMES),
         checkout: getRandomItem(CHECK_TIMES),
-        features: getRandomArray(FEATURES),
+        features: getRandomElements(FEATURES),
         description: getRandomItem(DESCRIPTIONS),
-        photos: getRandomArray(PHOTOS),
+        photos: getRandomElements(PHOTOS),
       },
       location: {
         x: locations[i].x,
@@ -125,30 +115,25 @@ var createOffersArray = function (quantity) {
       },
     };
   }
-
   return newArray;
 };
 
 var renderPin = function (advert) {
   var pinElement = pinTemplateElement.cloneNode(true);
   var imgElement = pinElement.querySelector('img');
-
-  pinElement.style.left = (advert.location.x + (PIN_WIDTH / 2)) + 'px';
-  pinElement.style.top = (advert.location.y + PIN_HIGHT) + 'px';
+  pinElement.style.left = (advert.location.x - (PIN_WIDTH / 2)) + 'px';
+  pinElement.style.top = (advert.location.y - PIN_HIGHT) + 'px';
   imgElement.src = advert.author.avatar;
   imgElement.alt = advert.offer.title;
-
   return pinElement;
 };
 
 var createFragment = function (array, render) {
   var fragment = document.createDocumentFragment();
-
   for (var i = 0; i < array.length; i++) {
     fragment.appendChild(render(array[i]));
   }
-
-  mapPinsElement.appendChild(fragment);
+  return fragment;
 };
 
 var addPins = function (adverts) {
@@ -156,8 +141,6 @@ var addPins = function (adverts) {
 };
 
 addPins(createOffersArray(OFFERS_QUANTITY));
-
-mapElement.classList.remove('map--faded');
 
 // 3-я лекция 2-е задание наброски
 
@@ -176,8 +159,6 @@ mapElement.classList.remove('map--faded');
 //     return 'Дом';
 //   } else if (type === 'palace') {
 //     return 'Дворец';
-//   } else {
-//     return 'Что ты такое?';
 //   }
 // };
 //
@@ -193,7 +174,7 @@ mapElement.classList.remove('map--faded');
 //
 // console.log(getImgElements(PHOTOS));
 //
-// var renderCards = function (proffer) {
+// var renderCard = function (proffer) {
 //   var cardElement = pinCardElement.cloneNode(true);
 //   cardElement.querySelector('.popup__avatar').src = proffer.author.avatar;
 //   cardElement.querySelector('.popup__title').textContent = proffer.offer.title;
@@ -212,7 +193,7 @@ mapElement.classList.remove('map--faded');
 //   return cardElement;
 // };
 //
-// console.log(renderCards(createOffersArray(1)[0]));
+// console.log(renderCard(createOffersArray(1)[0]));
 
 // 4-я лекция 1-е задание наброски
 
