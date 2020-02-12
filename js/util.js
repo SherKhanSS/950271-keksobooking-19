@@ -20,13 +20,13 @@
 
   var isEscEvent = function (evt, action) {
     if (evt.keyCode === ESC_KEY) {
-      action();
+      action(evt);
     }
   };
 
   var isEnterEvent = function (evt, action) {
     if (evt.keyCode === ENTER_KEY) {
-      action();
+      action(evt);
     }
   };
 
