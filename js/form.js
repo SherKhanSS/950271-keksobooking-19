@@ -8,6 +8,7 @@
   var mapElement = document.querySelector('.map');
   var mapPinsElement = mapElement.querySelector('.map__pins');
   var mapPinElement = mapPinsElement.querySelector('.map__pin--main');
+  var pinElements = mapPinsElement.querySelectorAll('.map__pin');
   var allFormsElements = document.querySelectorAll('select, input, textarea');
   var noticeElement = document.querySelector('.notice');
   var noticeFormElement = document.querySelector('.ad-form');
@@ -49,5 +50,12 @@
 
   mapPinElement.addEventListener('mousedown', onMapPinElement);
   mapPinElement.addEventListener('keydown', onMapPinElement);
+
+  mapPinsElement.addEventListener('click', function (evt) {
+    if (evt.target.closest('BUTTON')) {
+      console.log(evt.target.src);
+      console.log(evt.target.getBoundingClientRect());
+    }
+  });
 
 })();

@@ -234,8 +234,11 @@ var renderCard = function (proffer) {
   } else {
     popupPhotosElement.style.display = 'none';
   }
-  // все это выглядит, конечно, ужасно((
   return cardElement;
 };
 
-mapElement.insertBefore(renderCard(createOffersArray(OFFERS_QUANTITY)[0]), mapFiltersContainerElement);
+// mapElement.insertBefore(renderCard(createOffersArray(OFFERS_QUANTITY)[0]), mapFiltersContainerElement);
+
+var offersArray = createOffersArray(OFFERS_QUANTITY);
+console.log(offersArray);
+mapElement.insertBefore(renderCard(offersArray[0]), mapFiltersContainerElement);
