@@ -79,6 +79,8 @@ var pinCardElement = document.querySelector('#card')
 var popupPhotoElement = pinCardElement.querySelector('.popup__photo');
 var popupFeaturElement = pinCardElement.querySelector('.popup__feature');
 var mapFiltersContainerElement = mapElement.querySelector('.map__filters-container');
+var popupElement;
+var popupCloseElement;
 
 var createLocations = function (quantity) {
   var locations = new Array(quantity);
@@ -237,8 +239,34 @@ var renderCard = function (proffer) {
   return cardElement;
 };
 
-// mapElement.insertBefore(renderCard(createOffersArray(OFFERS_QUANTITY)[0]), mapFiltersContainerElement);
+var offersArrays = createOffersArray(OFFERS_QUANTITY);
 
-var offersArray = createOffersArray(OFFERS_QUANTITY);
-console.log(offersArray);
-mapElement.insertBefore(renderCard(offersArray[0]), mapFiltersContainerElement);
+var clearCard = function () {
+  mapElement.querySelector('.popup').remove();
+};
+
+var onPopupEscPress = function (evt) {
+  window.util.isEscEvent(evt, clearCard);
+};
+
+var addCard = function (offer) {
+  mapElement.insertBefore(renderCard(offer), mapFiltersContainerElement);
+  popupElement = mapElement.querySelector('.popup');
+  popupCloseElement = popupElement.querySelector('.popup__close');
+  popupCloseElement.addEventListener('click', clearCard);
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var addOffer = function (offer) {
+  if (mapElement.querySelector('.popup') === null) {
+    addCard(offer);
+  } else {
+    clearCard();
+    addCard(offer);
+  }
+};
+
+window.main = {
+  addOffer: addOffer,
+  offersArrays: offersArrays,
+};
