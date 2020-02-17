@@ -3,7 +3,8 @@
 (function () {
   var ENTER_KEY = 13;
   var MAP_PIN_ELEMENT_RADIUS = 78;
-  var MAP_PIN_ELEMENT_OFFSET_X = 25;
+  var MAP_PIN_ELEMENT_OFFSET_X = 30;
+  // по разметке 30, а не 25 =_=
   var MAP_PIN_ELEMENT_OFFSET_Y = 70;
   var LEFT_MOUSE_BUTTON = 1;
   var mapElement = document.querySelector('.map');
@@ -68,5 +69,47 @@
 
   mapPinElement.addEventListener('mousedown', onMapPinElementMousedown);
   mapPinElement.addEventListener('keydown', onMapPinElementKeydown);
+
+  // ограничение передвижения метки по карте пока не реализовано
+  mapPinElement.addEventListener('mousedown', function (evt) {
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+    var dragged = false;
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      dragged = true;
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+      mapPinElement.style.top = (mapPinElement.offsetTop - shift.y) + 'px';
+      mapPinElement.style.left = (mapPinElement.offsetLeft - shift.x) + 'px';
+      mapPinElementCoords = {
+        x: mapPinElementCoords.x - shift.x,
+        y: mapPinElementCoords.y - shift.y,
+      };
+      getAdressCoords(MAP_PIN_ELEMENT_OFFSET_X, MAP_PIN_ELEMENT_OFFSET_Y);
+    };
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      if (dragged) {
+        var onClickPreventDefault = function (clickEvt) {
+          clickEvt.preventDefault();
+          mapPinElement.removeEventListener('click', onClickPreventDefault);
+        };
+        mapPinElement.addEventListener('click', onClickPreventDefault);
+      }
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 
 })();
