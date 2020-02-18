@@ -58,7 +58,7 @@
     mapPinsElement.appendChild(createFragment(adverts, renderPin));
   };
 
-  addPins(window.data.offersArrays);
+  addPins(window.data.offers);
 
   var getImgElements = function (array) {
     var fragment = document.createDocumentFragment();
@@ -151,6 +151,8 @@
 
   var clearCard = function () {
     mapElement.querySelector('.popup').remove();
+    mapPinsElement.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    document.removeEventListener('keydown', onPopupEscPress);
   };
 
   var onPopupEscPress = function (evt) {
