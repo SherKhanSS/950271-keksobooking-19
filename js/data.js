@@ -96,10 +96,10 @@
     return newOffers;
   };
 
-  var offersArrays = createOffersArray(OFFERS_QUANTITY);
+  var offers = createOffersArray(OFFERS_QUANTITY);
 
   window.data = {
-    offersArrays: offersArrays,
+    offers: offers,
   };
 
 })();
