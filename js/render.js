@@ -58,7 +58,19 @@
     mapPinsElement.appendChild(createFragment(adverts, renderPin));
   };
 
-  addPins(window.data.offers);
+  var onError = function (errorMessage) {
+    // переписать в соответствии с ТЗ
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElem('afterbegin', node);
+  };
+
+  window.backend.load(addPins, onError);
 
   var getImgElements = function (array) {
     var fragment = document.createDocumentFragment();
@@ -152,6 +164,9 @@
   var clearCard = function () {
     mapElement.querySelector('.popup').remove();
     mapPinsElement.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    // тут исключить поиск по селектору, решить проблему с переменной,
+    // так как фунция, которая может ее создать,
+    // находится в следующем модуле и доступа к ней не будет
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
@@ -178,6 +193,8 @@
 
   window.render = {
     addOffer: addOffer,
+    addPins: addPins,
+    onError: onError,
   };
 
 })();
