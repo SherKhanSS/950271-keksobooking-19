@@ -47,7 +47,7 @@
   var createFragment = function (array, render) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < array.length; i++) {
-      if (typeof array[i]['offer'] !== 'undefined') {
+      if (typeof array[i]['offer'] !== undefined) {
         fragment.appendChild(render(array[i]));
       }
     }
@@ -59,7 +59,7 @@
   };
 
   var onError = function (errorMessage) {
-    // переписать в соответствии с ТЗ
+    // потом переписать в соответствии с ТЗ
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -193,8 +193,6 @@
 
   window.render = {
     addOffer: addOffer,
-    addPins: addPins,
-    onError: onError,
   };
 
 })();

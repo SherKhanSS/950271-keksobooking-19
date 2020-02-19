@@ -98,8 +98,8 @@
       } else if (newShiftX > (MAP_WIDTH - MAP_PIN_ELEMENT_OFFSET_X)) {
         newShiftX = (MAP_WIDTH - MAP_PIN_ELEMENT_OFFSET_X);
       }
-      // тут можно через Math.min и Max.max поменьше условий записать
-      // или посмотреть еще вариант решения из демо 8-й лекции
+      // тут можно через Math.min и Max.max поменьше условий записать (Алексей)
+      // исправить или посмотреть еще вариант решения из демо 8-й лекции
       mapPinElement.style.top = newShiftY + 'px';
       mapPinElement.style.left = newShiftX + 'px';
       mapPinElementCoords = {
@@ -109,7 +109,6 @@
       getAdressCoords(MAP_PIN_ELEMENT_OFFSET_X, MAP_PIN_ELEMENT_OFFSET_Y);
     };
     var onMouseUp = function () {
-      getAdressCoords(MAP_PIN_ELEMENT_OFFSET_X, MAP_PIN_ELEMENT_OFFSET_Y);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
