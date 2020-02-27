@@ -13,7 +13,6 @@
   var mapElement = document.querySelector('.map');
   var mapPinsElement = mapElement.querySelector('.map__pins');
   var mapPinElement = mapPinsElement.querySelector('.map__pin--main');
-  var pinElements = mapPinsElement.querySelectorAll('.map__pin:not(.map__pin--main)');
   var allFormsElements = document.querySelectorAll('select, input, textarea');
   var noticeElement = document.querySelector('.notice');
   var noticeFormElement = document.querySelector('.ad-form');
@@ -40,15 +39,31 @@
     });
   };
 
+  var onError = function (errorMessage) {
+    // потом переписать в соответствии с ТЗ
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElem('afterbegin', node);
+  };
+
   var changesActiv = function () {
+    var pinElements = mapPinsElement.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var i = 0; i < allFormsElements.length; i++) {
       allFormsElements[i].removeAttribute('disabled');
     }
-    for (var j = 0; j < pinElements.length; j++) {
-      var button = pinElements[j];
-      var offer = window.data.offers[j];
-      addPinClickListener(button, offer);
-    }
+    var onSuccess = function (offers) {
+      for (var j = 0; j < pinElements.length; j++) {
+        var button = pinElements[j];
+        var offer = offers[j];
+        addPinClickListener(button, offer);
+      }
+    };
+    window.backend.load(onSuccess, onError);
     mapElement.classList.remove('map--faded');
     noticeFormElement.classList.remove('ad-form--disabled');
     mapPinElement.removeEventListener('mousedown', onMapPinElementMousedown);

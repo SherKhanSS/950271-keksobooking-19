@@ -70,7 +70,14 @@
     document.body.insertAdjacentElem('afterbegin', node);
   };
 
-  window.backend.load(addPins, onError);
+  var offers = [];
+
+  var onSuccess = function (data) {
+    offers = data;
+    addPins(offers);
+  };
+
+  window.backend.load(onSuccess, onError);
 
   var getImgElements = function (array) {
     var fragment = document.createDocumentFragment();
